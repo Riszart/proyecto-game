@@ -23,6 +23,10 @@ const up = document.querySelector('#up')
 const down = document.querySelector('#down')
 const left = document.querySelector('#left')
 const right = document.querySelector('#right')
+const spanLives = document.querySelector('#lives')
+const spanTime = document.querySelector('#time')
+let timeInterbval
+let startTime
 
 right.addEventListener('click', move)
 left.addEventListener('click', move)
@@ -72,18 +76,24 @@ function setCanvasSize(){
     canvas.setAttribute('height',canvasSize)
     startGame()
 }
+
 function startGame(){
     const map = maps[level]
-    const mapRows = map.trim().split('\n')
-    //  .split('')  divide un string en partes de array ( \n    divide por saltos de linea)
-    const mapColumn = mapRows.map(element=>element.trim().split(''))
-    // .trim()  limpia el string (elimina los espacios en blanco)
     if(!map){
         gameWin()
         return // terminar la funcion para evitar hacer render
     }
+    const mapRows = map.trim().split('\n')
+    //  .split('')  divide un string en partes de array ( \n    divide por saltos de linea)
+    const mapColumn = mapRows.map(element=>element.trim().split(''))
+    // .trim()  limpia el string (elimina los espacios en blanco)
+
     elementsSize = (canvasSize/10)-1
 
+    if(!startTime){
+        startTime = Date.now()
+        timeInterbval = setInterval(showTime, 100)
+    }
     game.textAlign = "end"
     game.font =  elementsSize-5 +"px Arial"
 
@@ -152,15 +162,51 @@ function levelWin(){
     startGame()
 }
 function gameWin(){
-    console.log('saaaaaaaaaaaaaaaaaaaaaaaa')
+/*  localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
+    no funciona como un objeto y funcionan con metodos:
+    getItem --  leer un valor guardado en el localStorage del navegador (localStorage.getItem('nombre')
+    setItem --  guardar en el localStorage del navegador (localStorage.setItem('nombre','valor'))
+    removeItem  --  elimina la variable*/
+    clearInterval(timeInterbval)
+    let recorTime = localStorage.getItem('record_time')
+    let playerTime = Date.now() - startTime
+    console.log(playerTime)
+    if(recorTime){
+        if(recorTime >= playerTime){
+            localStorage.setItem('record_time', playerTime)
+        }else{
+            console.log('ssssssssssssss')
+        }
+        console.log('ya ganador')
+    }else{
+        localStorage.setItem('record_time', playerTime)
+        console.log('primer ganador')
+    }
 }
 function levelFail(){
+    showlives()
     lives--
     if(lives <= 0){
         level = 0
         lives = 3
+        startTime = undefined
     }
     playerPosition.x=undefined
     playerPosition.y=undefined
-    startGame()  
+    startGame()
+    showlives()  
 }
+showlives()
+//      .join('')   --- une los elementos de un array con lo que establesiste en la comilla
+function showlives(){
+    /*  const heartArray = Array(lives).fill(emojis['HEART'])
+      spanLives.innerHTML = heartArray.join('')*/
+    spanLives.innerHTML = emojis['HEART'].repeat(lives)
+}
+//  setTimeout(()=>console.log('hola'),1000)    --  ejecuta la funcion una sola ves despues del tiempo concurrido
+//  setInterval(()=>console.log('hola'),1000)    --  ejecuta la funcion cada sierto tiempo definido
+//  clearInterval(nombre del interbalo)     --  detiene el tiempo del interbalo nombrado
+function showTime(){
+    spanTime.innerHTML = Date.now() - startTime
+}
+
