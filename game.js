@@ -6,7 +6,7 @@ let elementsSize
 let enemyPosition = []
 let level = 0
 let lives = 3 
-let keyArray = true
+//let keyArray = true
 const playerPosition = {
     x:undefined, 
     y:undefined,
@@ -29,33 +29,33 @@ gift.src = 'img/caja-de-regalo.png'
 const start = new Image
 start.src = 'img/hogar.png'
 
-/*
-const up = document.querySelector('#up')
-const down = document.querySelector('#down')
-const left = document.querySelector('#left')
-const right = document.querySelector('#right')
-*/
-
 const spanLives = document.querySelector('#lives')
 const spanTime = document.querySelector('#time')
 let timeInterbval
 let startTime
 
-/*right.addEventListener('click', move)
-left.addEventListener('click', move)
-down.addEventListener('click', move)
-up.addEventListener('click', move)*/
-
+function setCanvasSize(){   //se adacta al tamaño de pantalla
+    if(window.innerHeight > window.innerWidth){
+        canvasSize = Number((window.innerWidth * 0.9).toFixed(0))
+    }
+    else{
+        canvasSize = Number((window.innerHeight * 0.9).toFixed(0))
+    } 
+    canvas.setAttribute('width',canvasSize)
+    canvas.setAttribute('height',canvasSize)
+    startGame()
+}
 
 function move(event){
   //console.log(event)   // --      ver para entender
     let keyboardPress = event.key
-//  let nameOne = event.srcElement.id
-//  if(nameTwo=='ArrowUp'||nameTwo=='ArrowDown'||nameTwo=='ArrowLeft'||nameTwo=='ArrowRight') nameOne = ""
+    if(!startTime){
+        startTime = Date.now()
+        timeInterbval = setInterval(showTime, 100)
+    }
     if(/*nameOne == "up" ||*/ keyboardPress == 'ArrowUp'){
         if(playerPosition.y > 0){
             playerPosition.y -= elementsSize
-            console.log(playerPosition.y)
             startGame()
         }
     }
@@ -79,35 +79,19 @@ function move(event){
     }
 }
 
-function setCanvasSize(){   //se adacta al tamaño de pantalla
-    if(window.innerHeight > window.innerWidth){
-        canvasSize = Number((window.innerWidth * 0.9).toFixed(0))
-    }
-    else{
-        canvasSize = Number((window.innerHeight * 0.9).toFixed(0))
-    } 
-    canvas.setAttribute('width',canvasSize)
-    canvas.setAttribute('height',canvasSize)
-    console.log('tamaño del canvas',canvasSize)
-    startGame()
-}
 function startGame(){
     const map = maps[level]
     if(!map){
-        enemyPosition = []
         gameWin()
         return // terminar la funcion para evitar hacer render
     }
+    enemyPosition = []
     const mapRows = map.trim().split('\n')
     //  .split('')  divide un string en partes de array ( \n    divide por saltos de linea)
     const mapColumn = mapRows.map(element=>element.trim().split(''))
     // .trim()  limpia el string (elimina los espacios en blanco)
     elementsSize = Number((canvasSize/15).toFixed(0))
 
-    if(!startTime){
-        startTime = Date.now()
-        timeInterbval = setInterval(showTime, 100)
-    }
     //game.textAlign = "start"
     //game.font =  "50px Arial"
     //game.textBaseline =  "middle"
@@ -119,30 +103,26 @@ function startGame(){
         row.forEach((col,indexCol)=>{
             const posY = elementsSize*(indexRow)
             const posX = elementsSize*(indexCol)
-            if(col == 'X'){
-                game.drawImage(bomb,posX,posY,elementsSize,elementsSize)
-                if(keyArray){
-                  enemyPosition.push({x: posX, y: posY,})
-                } 
-            }
-            if(col == 'I'){
-                console.log(giftPosition.x,giftPosition.y)
-                game.drawImage(gift,posX,posY,elementsSize,elementsSize)
-                giftPosition.x = posX
-                giftPosition.y = posY
-            }
+
             if(col == 'O'){
                 game.drawImage(start,posX,posY,elementsSize,elementsSize)
-                console.log(playerPosition.x,playerPosition.y)
                 if(!playerPosition.x && !playerPosition.y){
                     playerPosition.x = posX
                     playerPosition.y = posY
                 }
+            }else if(col == 'I'){
+                game.drawImage(gift,posX,posY,elementsSize,elementsSize)
+                giftPosition.x = posX
+                giftPosition.y = posY
+            }else if(col == 'X'){
+                game.drawImage(bomb,posX,posY,elementsSize,elementsSize)
+                //if(keyArray){
+                  enemyPosition.push({x: posX, y: posY,})
+                //} 
             }
         })
     })
-    console.log(enemyPosition)
-    keyArray = false
+    //keyArray = false
     movePlayer()
     
     /*for(let y = 1; y<=10; y++){
@@ -166,8 +146,6 @@ function movePlayer(){
     const giftColisionY = playerPosition.y  == giftPosition.y
     const colision = giftColisionX && giftColisionY
 
-    console.log(giftColisionX,giftColisionY)
-    
     if(colision){
         levelWin()
     }
@@ -182,22 +160,23 @@ function movePlayer(){
     game.drawImage(player,playerPosition.x,playerPosition.y,elementsSize,elementsSize)
 }
 function levelWin(){
-    enemyPosition = []
-    keyArray = true
+    //enemyPosition = []
+    //keyArray = true
     level++
-    console.log(level)
+    playerPosition.x=undefined
+    playerPosition.y=undefined
     startGame()
 }
 function gameWin(){
 /*  localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
-    no funciona como un objeto y funcionan con metodos:
+    no funciona como un objeto, funcionan con metodos:
     getItem --  leer un valor guardado en el localStorage del navegador (localStorage.getItem('nombre')
     setItem --  guardar en el localStorage del navegador (localStorage.setItem('nombre','valor'))
     removeItem  --  elimina la variable*/
     clearInterval(timeInterbval)
     let recorTime = localStorage.getItem('record_time')
     let playerTime = Date.now() - startTime
-    console.log(playerTime)
+    //console.log(playerTime)
     if(recorTime){
         if(recorTime >= playerTime){
             localStorage.setItem('record_time', playerTime)
@@ -211,7 +190,6 @@ function gameWin(){
     }
 }
 function levelFail(){
-    showlives()
     lives--
     if(lives <= 0){
         level = 0
@@ -228,7 +206,7 @@ showlives()
 function showlives(){
     const heartArray = Array(lives).fill(emojis['HEART'])
     spanLives.innerHTML = heartArray.join('')
-    spanLives.innerHTML = emojis['HEART'].repeat(lives)
+    //spanLives.innerHTML = emojis['HEART'].repeat(lives)
 }
 //  setTimeout(()=>console.log('hola'),1000)    --  ejecuta la funcion una sola ves despues del tiempo concurrido
 //  setInterval(()=>console.log('hola'),1000)    --  ejecuta la funcion cada sierto tiempo definido

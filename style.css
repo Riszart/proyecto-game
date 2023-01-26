@@ -21,6 +21,8 @@ body {
   grid-row: 2/8;
 }
 canvas {
+  border-radius: 5px;
+  border: solid 5px green;
   background-color: #ffffff;
 }
 .messages {
