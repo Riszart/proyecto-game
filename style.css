@@ -6,7 +6,10 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: blue;
+    background-image: url(./img/fondo.jpg);
+    background-repeat: none;
+    background-position: center;
+    background-size: 100%;
   }
 .game-container {
   display: flex;
@@ -21,11 +24,27 @@ body {
   grid-row: 2/8;
 }
 canvas {
+  /*background-image: url(./img/fondo-canvas.jpg);
+  background-repeat: none;
+  background-position: center;
+  background-size: 100%;*/
   border-radius: 5px;
   border: solid 5px green;
-  background-color: #ffffff;
 }
 .messages {
+  background-image: url(./img/fondo-data.webp);
+  color: azure;
+  background-repeat: none;
+  background-position: center;
+  background-size: 100%;
+  padding: 10px;
+  position: absolute;
+  right: 7%;
+  top: 50px;
+  border-radius: 5px;
+}
+.messages p{
+  margin: 15px;
 }
 p {
   display: block;

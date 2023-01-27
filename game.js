@@ -15,19 +15,28 @@ const giftPosition = {
     x:undefined,
     y:undefined,
 }
+let contenLetter
+let winMove
+let i = 0
+let active
+let playerTime
 
 window.addEventListener('load', setCanvasSize)
 window.addEventListener('resize', setCanvasSize)
 document.addEventListener('keydown', move)
 
 const bomb = new Image
-bomb.src = 'img/Bomb_anim0001.png'
+bomb.src = 'img/riesgo.png'
 const player = new Image
 player.src = 'img/player.png'
 const gift = new Image
 gift.src = 'img/caja-de-regalo.png'
 const start = new Image
 start.src = 'img/hogar.png'
+const explode = new Image
+explode.src = 'img/nuclear.png'
+const backgroundWin = new Image
+backgroundWin.src = 'img/fondo-win.avif'
 
 const spanLives = document.querySelector('#lives')
 const spanTime = document.querySelector('#time')
@@ -93,9 +102,9 @@ function startGame(){
     elementsSize = Number((canvasSize/15).toFixed(0))
 
     //game.textAlign = "start"
-    //game.font =  "50px Arial"
+    game.font = elementsSize+"px Arial bold"
     //game.textBaseline =  "middle"
-    //game.fillStyle = 'red'
+    game.fillStyle = '#78e1f9'
 
     game.clearRect(0,0,canvasSize,canvasSize)
 
@@ -103,7 +112,6 @@ function startGame(){
         row.forEach((col,indexCol)=>{
             const posY = elementsSize*(indexRow)
             const posX = elementsSize*(indexCol)
-
             if(col == 'O'){
                 game.drawImage(start,posX,posY,elementsSize,elementsSize)
                 if(!playerPosition.x && !playerPosition.y){
@@ -155,6 +163,9 @@ function movePlayer(){
         return enemyCollisionX && enemyCollisionY
     })
     if(enemyCollision){
+        game.clearRect(playerPosition.x,playerPosition.y,elementsSize,elementsSize)
+        game.drawImage(explode,playerPosition.x,playerPosition.y,elementsSize,elementsSize)
+        game.drawImage(player,playerPosition.x+elementsSize/4,playerPosition.y+elementsSize/4,elementsSize/2,elementsSize/2)
         levelFail()
     }
     game.drawImage(player,playerPosition.x,playerPosition.y,elementsSize,elementsSize)
@@ -168,27 +179,54 @@ function levelWin(){
     startGame()
 }
 function gameWin(){
-/*  localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
+    /*  
+    localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
     no funciona como un objeto, funcionan con metodos:
     getItem --  leer un valor guardado en el localStorage del navegador (localStorage.getItem('nombre')
     setItem --  guardar en el localStorage del navegador (localStorage.setItem('nombre','valor'))
-    removeItem  --  elimina la variable*/
+    removeItem  --  elimina la variable
+    */
+
+    //game.clearRect(0,0,canvasSize,canvasSize)
     clearInterval(timeInterbval)
     let recorTime = localStorage.getItem('record_time')
-    let playerTime = Date.now() - startTime
-    //console.log(playerTime)
     if(recorTime){
+        active = false
         if(recorTime >= playerTime){
             localStorage.setItem('record_time', playerTime)
+            contenLetter = 'NEW RECORD'
+            winMove = setInterval(animationWin,100)
         }else{
-            console.log('ssssssssssssss')
+            contenLetter = '- GAME WIM -'
+            winMove = setInterval(animationWin,100)
         }
-        console.log('ya ganador')
     }else{
+        contenLetter = 'PRIMER JUGADOR'
+        winMove = setInterval(animationWin,100)
         localStorage.setItem('record_time', playerTime)
-        console.log('primer ganador')
     }
 }
+
+function animationWin(){
+    if(i <= 14 && active == false){
+        i++
+        game.clearRect(0,canvasSize-elementsSize*i,canvasSize,canvasSize/3+elementsSize*i)
+    }else{
+        active = true
+        i--
+        game.clearRect(0,0,canvasSize,canvasSize)
+        if(i == 10){
+            clearInterval(winMove)
+       }
+    }
+    let positionRect = canvasSize-elementsSize*i
+    let sizeHeightRect = canvasSize/2.5
+    game.drawImage(backgroundWin,0,canvasSize-elementsSize*i,canvasSize,sizeHeightRect)
+    game.fillText('CONGRATULATIONS',canvasSize*0.17,(positionRect)+canvasSize/7,canvasSize,sizeHeightRect+elementsSize*i)
+    game.fillText(contenLetter,canvasSize*0.27,(positionRect)+canvasSize/3.5,canvasSize,sizeHeightRect+elementsSize*i)
+    game.fillText(playerTime,canvasSize*0.27,(positionRect)+canvasSize/2,canvasSize,sizeHeightRect+elementsSize*i)
+}
+
 function levelFail(){
     lives--
     if(lives <= 0){
@@ -198,7 +236,7 @@ function levelFail(){
     }
     playerPosition.x=undefined
     playerPosition.y=undefined
-    startGame()
+    setTimeout(startGame,500)
     showlives()  
 }
 showlives()
@@ -208,10 +246,13 @@ function showlives(){
     spanLives.innerHTML = heartArray.join('')
     //spanLives.innerHTML = emojis['HEART'].repeat(lives)
 }
-//  setTimeout(()=>console.log('hola'),1000)    --  ejecuta la funcion una sola ves despues del tiempo concurrido
-//  setInterval(()=>console.log('hola'),1000)    --  ejecuta la funcion cada sierto tiempo definido
-//  clearInterval(nombre del interbalo)     --  detiene el tiempo del interbalo nombrado
+let timeTrans
 function showTime(){
-    spanTime.innerHTML = Date.now() - startTime
+    playerTime = Date.now() - startTime
+    spanTime.innerHTML = playerTime
+    
+    //  setTimeout(()=>console.log('hola'),1000)    --  ejecuta la funcion una sola ves despues del tiempo concurrido
+    //  setInterval(()=>console.log('hola'),1000)    --  ejecuta la funcion cada sierto tiempo definido
+    //  clearInterval(nombre del interbalo)     --  detiene el tiempo del interbalo nombrado
 }
 
