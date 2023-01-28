@@ -1,3 +1,28 @@
+const bomb = new Image
+bomb.src = 'img/riesgo.png'
+const player = new Image
+player.src = 'img/player.png'
+const gift = new Image
+gift.src = 'img/caja-de-regalo.png'
+const start = new Image
+start.src = 'img/hogar.png'
+const explode = new Image
+explode.src = 'img/nuclear.png'
+const backgroundWin = new Image
+backgroundWin.src = 'img/fondo-data.webp' 
+const showTimePoint = new Image
+showTimePoint.src = 'img/fondo-win.avif'
+const letterF = new Image
+letterF.src = 'img/letra-f.png'
+const letterO = new Image
+letterO.src = 'img/letra-o.png'
+const letterL = new Image
+letterL.src = 'img/letra-l.png'
+const letterW = new Image
+letterW.src = 'img/letra-w.png'
+const loadFollow = new Image
+loadFollow.src = 'img/continuo.png'
+
 const emojis={
   //'-':' ',
   //'O':'🚪',
@@ -11,8 +36,8 @@ const emojis={
 }
 const maps=[];
 maps.push(`
-  -XXXXXXXXXXXXXX
   IXXXXXXXXXXXXXX
+  -XXXXXXXXXXXXXX
   -XXXXXXXXXXXXXX
   -XXXXXXXXXXXXXX
   -XXXXXXXXXXXXXX
@@ -28,7 +53,7 @@ maps.push(`
   OXXXXXXXXXXXXXX
 `)
 maps.push(`
-  O--XXXXXXXXXXXX
+  ---XXXXXXXXXXXX
   X--XXXXX-XX-XXX
   XX----XXXX-XXXX
   X--XX----XXXXXX
@@ -42,11 +67,11 @@ maps.push(`
   XXXXX-XXXXXX-XX
   XXXXX-XX-----XX
   XXXXX-XX-XXX-XX
-  XXXXI----XXXXXX
+  XXXOI----XXXXXX
   `)
   maps.push(`
-  ------XXXXX-XXX
-  XXIXX-XXXXX-XXX
+  I-----XXXXX-XXX
+  OXXXX-XXXXX-XXX
   XX----XXXX--XXX
   XX-XXXXXXX-XXXX
   XX-----XXX-XXXX
@@ -59,5 +84,5 @@ maps.push(`
   XXXXXXXXXX-XXXX
   XXXXXXXXX--XXXX
   XXXXXX------XXX
-  XXXXXXXXXXX---O
+  XXXXXXXXXXX----
 `)

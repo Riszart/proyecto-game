@@ -1,12 +1,13 @@
 const canvas = document.querySelector('#game')
 const game =  canvas.getContext('2d')
+const botom = document.querySelector('.bottom')
 
 let canvasSize
 let elementsSize
 let enemyPosition = []
 let level = 0
 let lives = 3 
-//let keyArray = true
+let keyUndefined = true
 const playerPosition = {
     x:undefined, 
     y:undefined,
@@ -20,23 +21,11 @@ let winMove
 let i = 0
 let active
 let playerTime
+let displayButtom = false
 
 window.addEventListener('load', setCanvasSize)
 window.addEventListener('resize', setCanvasSize)
 document.addEventListener('keydown', move)
-
-const bomb = new Image
-bomb.src = 'img/riesgo.png'
-const player = new Image
-player.src = 'img/player.png'
-const gift = new Image
-gift.src = 'img/caja-de-regalo.png'
-const start = new Image
-start.src = 'img/hogar.png'
-const explode = new Image
-explode.src = 'img/nuclear.png'
-const backgroundWin = new Image
-backgroundWin.src = 'img/fondo-win.avif'
 
 const spanLives = document.querySelector('#lives')
 const spanTime = document.querySelector('#time')
@@ -102,10 +91,9 @@ function startGame(){
     elementsSize = Number((canvasSize/15).toFixed(0))
 
     //game.textAlign = "start"
-    game.font = elementsSize+"px Arial bold"
+    game.font = elementsSize+"px Arial"
     //game.textBaseline =  "middle"
-    game.fillStyle = '#78e1f9'
-
+    game.fillStyle = '#25abe6'
     game.clearRect(0,0,canvasSize,canvasSize)
 
     mapColumn.forEach((row,indexRow) => {
@@ -114,9 +102,10 @@ function startGame(){
             const posX = elementsSize*(indexCol)
             if(col == 'O'){
                 game.drawImage(start,posX,posY,elementsSize,elementsSize)
-                if(!playerPosition.x && !playerPosition.y){
+                if(!playerPosition.x && !playerPosition.y && keyUndefined){
                     playerPosition.x = posX
                     playerPosition.y = posY
+                    keyUndefined = false
                 }
             }else if(col == 'I'){
                 game.drawImage(gift,posX,posY,elementsSize,elementsSize)
@@ -126,7 +115,7 @@ function startGame(){
                 game.drawImage(bomb,posX,posY,elementsSize,elementsSize)
                 //if(keyArray){
                   enemyPosition.push({x: posX, y: posY,})
-                //} 
+                //}
             }
         })
     })
@@ -174,19 +163,21 @@ function levelWin(){
     //enemyPosition = []
     //keyArray = true
     level++
+    keyUndefined = true
     playerPosition.x=undefined
     playerPosition.y=undefined
     startGame()
 }
+
 function gameWin(){
+    displayButtom = true
     /*  
     localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
     no funciona como un objeto, funcionan con metodos:
     getItem --  leer un valor guardado en el localStorage del navegador (localStorage.getItem('nombre')
     setItem --  guardar en el localStorage del navegador (localStorage.setItem('nombre','valor'))
-    removeItem  --  elimina la variable
+    removeItem('')  --  elimina la variable
     */
-
     //game.clearRect(0,0,canvasSize,canvasSize)
     clearInterval(timeInterbval)
     let recorTime = localStorage.getItem('record_time')
@@ -221,10 +212,47 @@ function animationWin(){
     }
     let positionRect = canvasSize-elementsSize*i
     let sizeHeightRect = canvasSize/2.5
+    let sizeImgLetter = elementsSize*0.7
     game.drawImage(backgroundWin,0,canvasSize-elementsSize*i,canvasSize,sizeHeightRect)
-    game.fillText('CONGRATULATIONS',canvasSize*0.17,(positionRect)+canvasSize/7,canvasSize,sizeHeightRect+elementsSize*i)
-    game.fillText(contenLetter,canvasSize*0.27,(positionRect)+canvasSize/3.5,canvasSize,sizeHeightRect+elementsSize*i)
-    game.fillText(playerTime,canvasSize*0.27,(positionRect)+canvasSize/2,canvasSize,sizeHeightRect+elementsSize*i)
+    game.fillText('CONGRATULATIONS',canvasSize*0.17,(positionRect)+canvasSize/6,canvasSize,sizeHeightRect+elementsSize*i)
+    game.fillText(contenLetter,canvasSize*0.27,(positionRect)+canvasSize/3.8,canvasSize,sizeHeightRect+elementsSize*i)
+    game.drawImage(showTimePoint,canvasSize*0.32,(positionRect)+canvasSize/2.2,elementsSize*5,elementsSize*2)
+    game.fillText(playerTime,canvasSize*0.40,(positionRect)+canvasSize/1.85,canvasSize,sizeHeightRect+elementsSize*i)
+    /*
+    game.drawImage(letterF,canvasSize*0.28+sizeImgLetter*1,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.drawImage(letterO,canvasSize*0.28+sizeImgLetter*2,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.drawImage(letterL,canvasSize*0.28+sizeImgLetter*3,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.drawImage(letterL,canvasSize*0.28+sizeImgLetter*4,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.drawImage(letterO,canvasSize*0.28+sizeImgLetter*5,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.drawImage(letterW,canvasSize*0.28+sizeImgLetter*6,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
+    game.clearRect(canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
+    */
+    game.drawImage(loadFollow,canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
+    botom.addEventListener('click', followGame)
+
+    if(displayButtom == true){
+        setTimeout(()=>{botom.style.display = "block"},2000)
+        displayButtom = false
+    }
+}
+function followGame(event){
+    
+    //let clickX = event.offsetX
+    //let clickY = event.offsetY
+    //console.log(event)
+    //if( 456 < clickX && clickX < 513 && 452 < clickY && clickY < 483 ){
+        level = 0
+        lives = 3
+        startTime = undefined
+        keyUndefined = true
+        playerPosition.x=undefined
+        playerPosition.y=undefined
+        backInicio = setInterval(animationWin,100)
+        setTimeout(()=>{location.reload()},2000)
+        botom.style.display = "none"
+        botom.style.height = "500px"
+        
+    //}
 }
 
 function levelFail(){
@@ -233,7 +261,9 @@ function levelFail(){
         level = 0
         lives = 3
         startTime = undefined
+        setTimeout(()=>{location.reload()},300)
     }
+    keyUndefined = true
     playerPosition.x=undefined
     playerPosition.y=undefined
     setTimeout(startGame,500)
@@ -246,7 +276,6 @@ function showlives(){
     spanLives.innerHTML = heartArray.join('')
     //spanLives.innerHTML = emojis['HEART'].repeat(lives)
 }
-let timeTrans
 function showTime(){
     playerTime = Date.now() - startTime
     spanTime.innerHTML = playerTime

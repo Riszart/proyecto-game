@@ -7,17 +7,22 @@ body {
     margin: 0;
     padding: 0;
     background-image: url(./img/fondo.jpg);
-    background-repeat: none;
+    background-repeat: no-repeat;
     background-position: center;
-    background-size: 100%;
+    background-size: cover;
   }
 .game-container {
   display: flex;
   flex-direction: column; 
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 100vh;
   width: 100vw;
+}
+.container-tittle{
+  font-size: 35px;
+  color: #25abe6;
+  margin-bottom: 15px;
 }
 .container-canvas {
   grid-column: 1/3;
@@ -28,20 +33,50 @@ canvas {
   background-repeat: none;
   background-position: center;
   background-size: 100%;*/
-  border-radius: 5px;
-  border: solid 5px green;
+  outline: solid 4px green;
 }
 .messages {
-  background-image: url(./img/fondo-data.webp);
   color: azure;
-  background-repeat: none;
+  background-image: url(./img/fondo-data.webp);
+  background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: cover;
   padding: 10px;
   position: absolute;
   right: 7%;
   top: 50px;
   border-radius: 5px;
+}
+.bottom{
+  display: none;
+  background-image: url(./img/diital-botom.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: solid #25abe6 2px;
+  border-radius: 10px;
+  height: 40px;
+  width: 200px;
+  font-weight: bold;
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: translate(-55%, -0%);
+  color: rgb(77, 71, 71);
+  font-size: 20px;
+  text-shadow:-1px -1px 1px #25abe6,
+              1px 1px 1px #25abe6,
+              -1px 1px 1px #25abe6,
+              1px -1px 1px #25abe6;
+  box-shadow: 0px 0px 5px rgb(248, 244, 244);
+}
+.bottom:hover{
+  transform: scale(1.05);
+  box-shadow: 0px 0px 0px rgb(248, 244, 244);
+}
+.bottom p{
+  padding-top: 7px;
+  text-align: center;
 }
 .messages p{
   margin: 15px;
@@ -51,12 +86,28 @@ p {
   margin: 0;
   width: 100%;
 }
-@media (max-width: 1000px) {
-  .game-container {
-  }
-}
-@media (max-width: 580px) {
-  .game-container {
 
+@media (max-width: 1200px) {
+  .messages {
+    position: relative;
   }
+  .bottom{
+    top: 20%;
+    transform: translate(-50%, -100%);
+  }
+  .bottom:hover{
+    transform: scale(1);
+  }
+
+}
+@media screen and (max-width: 600px) {
+  .container-tittle{
+    font-size: 25px;
+    color: #25abe6;
+    margin-bottom: 15px;
+  }
+  .bottom{
+    top: 15%;
+  }
+
 }
