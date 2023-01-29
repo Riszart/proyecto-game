@@ -1,6 +1,12 @@
 const canvas = document.querySelector('#game')
 const game =  canvas.getContext('2d')
 const botom = document.querySelector('.bottom')
+const contentInicio = document.querySelector('.inicio')
+const botomInicio = document.querySelector('.inicio__botom')
+botomInicio.addEventListener('click', ()=>{
+    contentInicio.classList.add('inactive')
+})
+
 
 let canvasSize
 let elementsSize
