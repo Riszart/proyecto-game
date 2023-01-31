@@ -1,5 +1,10 @@
 :root{
   --side-boton: 40px;
+  --background-linear: linear-gradient(rgb(40, 231, 126), rgb(16, 16, 177));
+  --background-linear-hover: linear-gradient(rgb(16, 16, 177), rgb(40, 231, 126));
+  --color-primary-botom:rgb(16, 16, 177);
+  --color-secundary-botom:rgb(40, 231, 126);
+
 }
 *{
   font-family: 'Abril Fatface', cursive;
@@ -9,9 +14,12 @@
 .inactive{
   visibility: hidden;
 }
+.active{
+  visibility: visible;
+}
 .color-gradient{
   /* text gradient background */
-  background: linear-gradient(rgb(40, 231, 126), rgb(16, 16, 177));
+  background: var(--background-linear);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -47,17 +55,9 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  border-radius: 5px;
-  box-shadow: inset 9px 9px 18px #354dec,
-              inset -9px -9px 18px #598b6e,
-              9px 9px 20px #354dec,
-              -9px -9px 20px #598b6e;
-}
-.inicio__content-text:hover{
-  box-shadow: inset 9px 9px 18px #598b6e,
-  inset -9px -9px 18px #354dec,
-  9px 9px 20px #598b6e,
-  -9px -9px 20px #354dec;
+  animation-name: interval;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 }
 .data-wim-player__all{
   margin-bottom: 25px;
@@ -69,12 +69,12 @@
   margin-top: 10vh;
   padding: 10px;
   font-size: 2vh;
-  background: linear-gradient(rgb(40, 231, 126), rgb(16, 16, 177));
+  background: var(--background-linear);
   border-radius: 5px;
   border: solid rgb(16, 16, 177) 5px;
 }
 .inicio__botom:hover{
-  background: linear-gradient(rgb(16, 16, 177),rgb(40, 231, 126));
+  background: var(--background-linear-hover);
   border: solid rgb(40, 231, 126) 5px;
 }
 .inicio__footer{
@@ -107,22 +107,52 @@ body {
 }
 .container-tittle{
   font-size: 35px;
-  color: #25abe6;
+  color: #25aae4;
   margin-bottom: 15px;
 }
+.content-send__data-win{
+  margin: 0 auto;
+  font-size: 22px;
+  color: wheat;
+  position: absolute;
+  top: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.win__player{
+  color: var(--color-secundary-botom);
+  background: transparent;
+  border-bottom: solid 2px var(--color-primary-botom);
+  border-left: solid 2px var(--color-primary-botom);
+  border-right: solid 2px var(--color-secundary-botom);
+  border-top: solid 2px var(--color-secundary-botom);
+}
+.send-data__localStorage{
+  outline: solid 2px var(--color-primary-botom);
+  margin-top: 15px;
+  padding: 2px 15px;
+  border-radius: 10px;
+  background: var(--background-linear);
+}
+.send-data__localStorage:hover{
+  outline: solid 2px var(--color-secundary-botom);
+  background: var(--background-linear-hover);
+}
+
 .container-canvas {
   grid-column: 1/3;
   grid-row: 2/8;
 }
 canvas {
-  /*background-image: url(./img/fondo-canvas.jpg);
+  background-image: url(./img/fondo-canvas.jpg);
   background-repeat: none;
   background-position: center;
-  background-size: 100%;*/
-  outline: solid 4px green;
+  background-size: 100%;
+  outline: solid 4px #25aae4;
 }
 .messages {
-  color: azure;
+  color: var(--color-secundary-botom);
   background-image: url(./img/fondo-data.webp);
   background-repeat: no-repeat;
   background-position: center;
@@ -135,31 +165,29 @@ canvas {
   border-radius: 5px;
 }
 .bottom{
+  z-index: 500;
   display: none;
-  background-image: url(./img/diital-botom.jpg);
+  /*background-image: url(./img/diital-botom.jpg);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: cover;*/
   border: solid #25abe6 2px;
   border-radius: 10px;
   height: 40px;
   width: 200px;
   font-weight: bold;
   position: absolute;
-  top: 62%;
+  top: 63%;
   left: 50%;
   transform: translate(-55%, -0%);
-  color: rgb(77, 71, 71);
+  color: azure;
   font-size: 20px;
-  text-shadow:-1px -1px 1px #25abe6,
-              1px 1px 1px #25abe6,
-              -1px 1px 1px #25abe6,
-              1px -1px 1px #25abe6;
-  box-shadow: 0px 0px 5px rgb(248, 244, 244);
+  outline: solid 2px var(--color-primary-botom);
+  background: var(--background-linear);
 }
 .bottom:hover{
-  /*transform: scale(1.05);*/
-  box-shadow: 0px 0px 0px rgb(248, 244, 244);
+  outline: solid 2px var(--color-secundary-botom);
+  background: var(--background-linear-hover);
 }
 .bottom p{
   padding-top: 7px;
@@ -189,8 +217,14 @@ p {
     padding-top: 4px;
     text-align: center;
   }
+  .inicio__name-game{
+    font-size: 50px;
+  }
 }
 @media screen and (max-width: 600px) {
+  .inicio__name-game{
+    font-size: 25px;
+  }
   .container-tittle{
     font-size: 25px;
     color: #25abe6;
@@ -198,5 +232,97 @@ p {
   }
   .bottom{
     top: 15%;
+  }
+  .inicio__content-text{
+    color: aliceblue;
+    padding: 2.5% 2.5px 2.5px 5%;
+    min-width: 200px;
+    min-height: 120px;
+    font-size: 9px;
+    animation-name: intervalMobil600;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+  .data-wim-player__all{
+    margin-bottom: 12px;
+  }
+  .data-wim-player__first, .data-wim-player__second{
+    margin-bottom: 7px;
+  }
+  .inicio__footer{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .inicio{
+    animation-name: fondo;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+ 
+}
+@keyframes interval{
+  0% {
+    box-shadow: inset 9px 9px 18px var(--color-secundary-botom),
+    inset -9px -9px 18px  var(--color-secundary-botom),
+    9px 9px 20px var(--color-primary-botom),
+    -9px -9px 0px  var(--color-primary-botom);
+    border-radius: 35px;
+
+
+  }
+  50% {
+    box-shadow: inset 9px 9px 18px var(--color-primary-botom),
+    inset -9px -9px 18px var(--color-primary-botom),
+    9px 9px 20px var(--color-secundary-botom),
+    -9px -9px 20px var(--color-secundary-botom);
+    border-radius: 15px;
+
+
+  }
+  100% {
+    box-shadow: inset 9px 9px 18px var(--color-secundary-botom),
+    inset -9px -9px 18px  var(--color-secundary-botom),
+    9px 9px 20px var(--color-primary-botom),
+    -9px -9px 20px  var(--color-primary-botom);
+    border-radius: 35px;
+  }
+}
+@keyframes intervalMobil600{
+  0% {
+    box-shadow: inset 4px 4px 5px var(--color-secundary-botom),
+    inset -4px -4px 5px  var(--color-secundary-botom),
+    4px 4px 10px var(--color-primary-botom),
+    -4px -4px 0px  var(--color-primary-botom);
+    border-radius: 5px;
+  }
+  50% {
+    box-shadow: inset 4px 4px 5px var(--color-primary-botom),
+    inset -4px -4px 5px var(--color-primary-botom),
+    4px 4px 10px var(--color-secundary-botom),
+    -4px -4px 10px var(--color-secundary-botom);
+    border-radius: 10px;
+
+
+  }
+  100% {
+    box-shadow: inset 4px 4px 5px var(--color-secundary-botom),
+    inset -4px -4px 5px  var(--color-secundary-botom),
+    4px 4px 10px var(--color-primary-botom),
+    -4px -4px 0px  var(--color-primary-botom);
+    border-radius: 5px;
+  }
+}
+@keyframes fondo{
+  0% {
+    background-position: left;
+  }
+  50% {
+    background-position: right;
+
+  }
+  100% {
+    background-position: left;
+
   }
 }

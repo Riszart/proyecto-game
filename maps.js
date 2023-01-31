@@ -53,7 +53,7 @@ maps.push(`
   OXXXXXXXXXXXXXX
 `)
 maps.push(`
-  ---XXXXXXXXXXXX
+  I--XXXXXXXXXXXX
   X--XXXXX-XX-XXX
   XX----XXXX-XXXX
   X--XX----XXXXXX
@@ -67,11 +67,11 @@ maps.push(`
   XXXXX-XXXXXX-XX
   XXXXX-XX-----XX
   XXXXX-XX-XXX-XX
-  XXXOI----XXXXXX
+  XXXO-----XXXXXX
   `)
   maps.push(`
   I-----XXXXX-XXX
-  OXXXX-XXXXX-XXX
+  -XXXX-XXXXX-XXX
   XX----XXXX--XXX
   XX-XXXXXXX-XXXX
   XX-----XXX-XXXX
@@ -84,5 +84,5 @@ maps.push(`
   XXXXXXXXXX-XXXX
   XXXXXXXXX--XXXX
   XXXXXX------XXX
-  XXXXXXXXXXX----
+  XXXXXXXXXXX---O
 `)

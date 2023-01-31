@@ -2,11 +2,20 @@ const canvas = document.querySelector('#game')
 const game =  canvas.getContext('2d')
 const botom = document.querySelector('.bottom')
 const contentInicio = document.querySelector('.inicio')
+const dataPalyer = document.querySelector('.win__player')
+const sendDataWin = document.querySelector('.content-send__data-win')
 const botomInicio = document.querySelector('.inicio__botom')
+const botomSendDataWin = document.querySelector('.send-data__localStorage')
+const inicioContent = document.querySelector('.inicio__content-text')
+
+
+const firstPlace = document.querySelector('.first__place')
+const secondPlace = document.querySelector('.second__place')
+const thirdPlace = document.querySelector('.third__place')
+let namePlayerNow
 botomInicio.addEventListener('click', ()=>{
     contentInicio.classList.add('inactive')
 })
-
 
 let canvasSize
 let elementsSize
@@ -25,7 +34,7 @@ const giftPosition = {
 let contenLetter
 let winMove
 let i = 0
-let active
+let active 
 let playerTime
 let displayButtom = false
 
@@ -97,9 +106,9 @@ function startGame(){
     elementsSize = Number((canvasSize/15).toFixed(0))
 
     //game.textAlign = "start"
-    game.font = elementsSize+"px Arial"
+    game.font = elementsSize+"px 'Space Mono'"
     //game.textBaseline =  "middle"
-    game.fillStyle = '#25abe6'
+    game.fillStyle = 'rgb(40, 231, 126)'
     game.clearRect(0,0,canvasSize,canvasSize)
 
     mapColumn.forEach((row,indexRow) => {
@@ -176,6 +185,9 @@ function levelWin(){
 }
 
 function gameWin(){
+    clearInterval(timeInterbval)
+    active = false
+    winMove = setInterval(animationWin,100)
     displayButtom = true
     /*  
     localStorage    --  funciona solo en el frontend, guarda una variable en un navegador
@@ -184,24 +196,72 @@ function gameWin(){
     setItem --  guardar en el localStorage del navegador (localStorage.setItem('nombre','valor'))
     removeItem('')  --  elimina la variable
     */
-    //game.clearRect(0,0,canvasSize,canvasSize)
-    clearInterval(timeInterbval)
-    let recorTime = localStorage.getItem('record_time')
-    if(recorTime){
-        active = false
-        if(recorTime >= playerTime){
-            localStorage.setItem('record_time', playerTime)
-            contenLetter = 'NEW RECORD'
-            winMove = setInterval(animationWin,100)
-        }else{
-            contenLetter = '- GAME WIM -'
-            winMove = setInterval(animationWin,100)
-        }
-    }else{
-        contenLetter = 'PRIMER JUGADOR'
-        winMove = setInterval(animationWin,100)
-        localStorage.setItem('record_time', playerTime)
+    let referencia = JSON.parse(localStorage.getItem('thirdPlayer'))
+    if(localStorage.firstPlayer ){
+        if(referencia.point >= playerTime){contenLetter = 'TOP THREE'}
+        else if(referencia.point==null){contenLetter = 'TOP THREE'}
+        else{contenLetter = '-GAME WIM-'
+        botomSendDataWin.classList.add('inactive')}
+    }else{contenLetter = '-1° PLAYER-'}
+    botomSendDataWin.addEventListener('click',sendDataWinPlayers)
+    botom.addEventListener('click', followGame)
+    if(displayButtom == true){
+        setTimeout(()=>{
+            botom.style.display = "block"
+            sendDataWin.classList.remove('inactive')},2000)
+        displayButtom = false
     }
+}
+function sendDataWinPlayers(){
+    if(dataPalyer.value == ""){
+        console.log("ingrese un nombre")
+    }else{
+        botomSendDataWin.classList.add('inactive')
+        addDataWinTable()
+        inicioContent.classList.add('active')
+    }
+}
+function addDataWinTable(){
+    let referencia = JSON.parse(localStorage.getItem('thirdPlayer'))
+    /* de esta manera se lee una objeto en el local store */
+    if(localStorage.firstPlayer ){
+        if(referencia.point >= playerTime){firstSecondThirt()}
+        else if(referencia.point==null){firstSecondThirt()}
+    }else{
+        localStorage.setItem('firstPlayer', JSON.stringify({name:dataPalyer.value,point:playerTime}))
+        localStorage.setItem('secondPlayer', JSON.stringify({name:null,point:null}))
+        localStorage.setItem('thirdPlayer', JSON.stringify({name:null,point:null}))
+    }
+    dataPalyer.value = ''
+    tableShowPlace()
+}
+tableShowPlace()
+function tableShowPlace(){
+    let first = JSON.parse(localStorage.getItem('firstPlayer'))
+    let second = JSON.parse(localStorage.getItem('secondPlayer'))
+    let third = JSON.parse(localStorage.getItem('thirdPlayer'))
+    firstPlace.innerText = first.point + ' -- ' + first.name
+    secondPlace.innerText = second.point + ' -- ' + second.name
+    thirdPlace.innerText = third.point + ' -- ' + third.name
+}
+
+function firstSecondThirt(){
+    const arraysLocalStorage = []
+    arraysLocalStorage.push({name:dataPalyer.value,point:playerTime})
+    arraysLocalStorage.push(JSON.parse(localStorage.getItem('firstPlayer')))
+    arraysLocalStorage.push(JSON.parse(localStorage.getItem('secondPlayer')))
+    arraysLocalStorage.push(JSON.parse(localStorage.getItem('thirdPlayer')))
+    arraysLocalStorage.sort((a,b)=>a.point - b.point)
+    if(arraysLocalStorage[0].point==null){
+        arraysLocalStorage.shift()
+        if(arraysLocalStorage[0].point==null){
+            arraysLocalStorage.shift()
+            arraysLocalStorage.push({name:null,point:null})
+        }
+    }
+    localStorage.setItem('firstPlayer', JSON.stringify(arraysLocalStorage[0]))
+    localStorage.setItem('secondPlayer', JSON.stringify(arraysLocalStorage[1]))
+    localStorage.setItem('thirdPlayer', JSON.stringify(arraysLocalStorage[2]))
 }
 
 function animationWin(){
@@ -214,7 +274,10 @@ function animationWin(){
         game.clearRect(0,0,canvasSize,canvasSize)
         if(i == 10){
             clearInterval(winMove)
-       }
+        }else if(i == 0){
+            clearInterval(winMove)
+            startGame()
+        }
     }
     let positionRect = canvasSize-elementsSize*i
     let sizeHeightRect = canvasSize/2.5
@@ -234,30 +297,23 @@ function animationWin(){
     game.clearRect(canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
     */
     game.drawImage(loadFollow,canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
-    botom.addEventListener('click', followGame)
-
-    if(displayButtom == true){
-        setTimeout(()=>{botom.style.display = "block"},2000)
-        displayButtom = false
-    }
 }
 function followGame(event){
-    
     //let clickX = event.offsetX
     //let clickY = event.offsetY
     //console.log(event)
     //if( 456 < clickX && clickX < 513 && 452 < clickY && clickY < 483 ){
+        inicioContent.classList.remove('active')
         level = 0
         lives = 3
         startTime = undefined
         keyUndefined = true
         playerPosition.x=undefined
         playerPosition.y=undefined
-        backInicio = setInterval(animationWin,100)
-        setTimeout(()=>{location.reload()},2000)
         botom.style.display = "none"
-        botom.style.height = "500px"
-        
+        sendDataWin.classList.add('inactive')
+        botomSendDataWin.classList.remove('inactive')
+        winMove = setInterval(animationWin,100)
     //}
 }
 
@@ -267,7 +323,8 @@ function levelFail(){
         level = 0
         lives = 3
         startTime = undefined
-        setTimeout(()=>{location.reload()},300)
+
+        setTimeout(setCanvasSize,300)
     }
     keyUndefined = true
     playerPosition.x=undefined
