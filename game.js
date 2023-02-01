@@ -67,25 +67,25 @@ function move(event){
         startTime = Date.now()
         timeInterbval = setInterval(showTime, 100)
     }
-    if(/*nameOne == "up" ||*/ keyboardPress == 'ArrowUp'){
+    if(keyboardPress == 'ArrowUp'){
         if(playerPosition.y > 0){
             playerPosition.y -= elementsSize
             startGame()
         }
     }
-    if(/*nameOne == "down" || */keyboardPress == 'ArrowDown'){
+    if(keyboardPress == 'ArrowDown'){
         if(playerPosition.y < canvasSize - elementsSize*1.5){
             playerPosition.y += elementsSize
             startGame()
         }
     }
-    if(/*nameOne == "left" || */keyboardPress == 'ArrowLeft'){
+    if(keyboardPress == 'ArrowLeft'){
         if(playerPosition.x > 0){
             playerPosition.x -= elementsSize
             startGame()
         }
     }
-    if(/*nameOne == "right" ||*/ keyboardPress == 'ArrowRight'){
+    if(keyboardPress == 'ArrowRight'){
         if(playerPosition.x < canvasSize - elementsSize*1.5){
             playerPosition.x += elementsSize
             startGame()
@@ -129,13 +129,10 @@ function startGame(){
                 giftPosition.y = posY
             }else if(col == 'X'){
                 game.drawImage(bomb,posX,posY,elementsSize,elementsSize)
-                //if(keyArray){
                   enemyPosition.push({x: posX, y: posY,})
-                //}
             }
         })
     })
-    //keyArray = false
     movePlayer()
     
     /*for(let y = 1; y<=10; y++){
@@ -176,8 +173,6 @@ function movePlayer(){
     game.drawImage(player,playerPosition.x,playerPosition.y,elementsSize,elementsSize)
 }
 function levelWin(){
-    //enemyPosition = []
-    //keyArray = true
     level++
     keyUndefined = true
     playerPosition.x=undefined
@@ -288,34 +283,20 @@ function animationWin(){
     game.fillText(contenLetter,canvasSize*0.27,(positionRect)+canvasSize/3.8,canvasSize,sizeHeightRect+elementsSize*i)
     game.drawImage(showTimePoint,canvasSize*0.32,(positionRect)+canvasSize/2.2,elementsSize*5,elementsSize*2)
     game.fillText(playerTime,canvasSize*0.40,(positionRect)+canvasSize/1.85,canvasSize,sizeHeightRect+elementsSize*i)
-    /*
-    game.drawImage(letterF,canvasSize*0.28+sizeImgLetter*1,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.drawImage(letterO,canvasSize*0.28+sizeImgLetter*2,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.drawImage(letterL,canvasSize*0.28+sizeImgLetter*3,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.drawImage(letterL,canvasSize*0.28+sizeImgLetter*4,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.drawImage(letterO,canvasSize*0.28+sizeImgLetter*5,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.drawImage(letterW,canvasSize*0.28+sizeImgLetter*6,(positionRect)+canvasSize/3.3,sizeImgLetter,sizeImgLetter)
-    game.clearRect(canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
-    */
     game.drawImage(loadFollow,canvasSize*0.28+sizeImgLetter*7.65,(positionRect)+canvasSize/3.4,elementsSize,elementsSize)
 }
 function followGame(event){
-    //let clickX = event.offsetX
-    //let clickY = event.offsetY
-    //console.log(event)
-    //if( 456 < clickX && clickX < 513 && 452 < clickY && clickY < 483 ){
-        inicioContent.classList.remove('active')
-        level = 0
-        lives = 3
-        startTime = undefined
-        keyUndefined = true
-        playerPosition.x=undefined
-        playerPosition.y=undefined
-        botom.style.display = "none"
-        sendDataWin.classList.add('inactive')
-        botomSendDataWin.classList.remove('inactive')
-        winMove = setInterval(animationWin,100)
-    //}
+    inicioContent.classList.remove('active')
+    level = 0
+    lives = 3
+    startTime = undefined
+    keyUndefined = true
+    playerPosition.x=undefined
+    playerPosition.y=undefined
+    botom.style.display = "none"
+    sendDataWin.classList.add('inactive')
+    botomSendDataWin.classList.remove('inactive')
+    winMove = setInterval(animationWin,100)
 }
 
 function levelFail(){
