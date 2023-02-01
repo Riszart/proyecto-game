@@ -47,6 +47,7 @@ const spanTime = document.querySelector('#time')
 let timeInterbval
 let startTime
 
+showlives()
 function setCanvasSize(){   //se adacta al tamaño de pantalla
     if(window.innerHeight > window.innerWidth){
         canvasSize = Number((window.innerWidth * 0.9).toFixed(0))
@@ -323,16 +324,16 @@ function levelFail(){
         level = 0
         lives = 3
         startTime = undefined
-
+        clearInterval(timeInterbval)
         setTimeout(setCanvasSize,300)
     }
     keyUndefined = true
     playerPosition.x=undefined
     playerPosition.y=undefined
     setTimeout(startGame,500)
-    showlives()  
+     showlives()  
 }
-showlives()
+
 //      .join('')   --- une los elementos de un array con lo que establesiste en la comilla
 function showlives(){
     const heartArray = Array(lives).fill(emojis['HEART'])

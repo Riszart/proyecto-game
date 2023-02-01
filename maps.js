@@ -11,15 +11,7 @@ explode.src = 'img/nuclear.png'
 const backgroundWin = new Image
 backgroundWin.src = 'img/fondo-data.webp' 
 const showTimePoint = new Image
-showTimePoint.src = 'img/fondo-win.avif'
-const letterF = new Image
-letterF.src = 'img/letra-f.png'
-const letterO = new Image
-letterO.src = 'img/letra-o.png'
-const letterL = new Image
-letterL.src = 'img/letra-l.png'
-const letterW = new Image
-letterW.src = 'img/letra-w.png'
+showTimePoint.src = 'img/place-background.jpg'
 const loadFollow = new Image
 loadFollow.src = 'img/continuo.png'
 
